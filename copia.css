@@ -1,0 +1,525 @@
+
+html{
+    scroll-behavior: smooth
+}
+/* Importa una fuente futurista si quieres */
+ @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@400;700&display=swap');
+
+:root {
+    --primary-dark: #1a1a2e; /* Fondo principal oscuro */
+    --secondary-dark: #16213e; /* Fondo secundario oscuro */
+    --accent-blue: #0f4c75; /* Azul medio */
+    --neon-purple: #bb00ff; /* Neón Púrpura */
+    --neon-blue: #00e5ff; /* Neón Azul */
+    --text-light: #e0e0e0; /* Texto claro */
+    --text-muted: #a0a0a0; /* Texto secundario */
+    --i:#56CCF2;--j:#2F80ED;
+    --i:#FF9966;--j:#FF5E62;
+    --k:#80FF72;--j:#7EE8FA;
+    --r : #ffa9c6;--j:#f434e2;
+}
+
+
+
+/* Estilos Generales */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif; /* Fuente futurista */
+    background-color: var(--primary-dark);
+    color: var(--text-light);
+    line-height: 1.6;
+    overflow-x: hidden; /* Evita scroll horizontal no deseado */
+}
+
+a {
+    color: var(--neon-blue);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--neon-purple);
+}
+
+/* Header con Video de Fondo */
+.hero-header {
+    position: relative;
+    width: 100%;
+    height: 70vh; /* O la altura que prefieras para el header */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Asegura que el video no se desborde */
+}
+
+#video-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    object-fit: cover; /* Cubre el área sin distorsionar */
+    filter: brightness(0.6); /* Oscurece el video para que el texto resalte */
+}
+
+.header-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente para el texto */
+    border-radius: 10px;
+    backdrop-filter: blur(5px); /* Efecto de cristal esmerilado */
+    border: 1px solid rgba(var(--neon-blue), 0.5); /* Borde sutil */
+    box-shadow: 0 0 20px rgba(var(--neon-blue), 0.7);
+}
+
+.header-content h1 {
+    font-family: 'Orbitron', sans-serif; /* Otra fuente futurista para títulos */
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    color: var(--neon-blue);
+    text-shadow: 0 0 10px rgba(var(--neon-blue), 0.8);
+}
+
+.header-content p {
+    font-size: 1.2em;
+    color: var(--text-light);
+}
+
+/* Navegación (Nav) */
+#main-nav {
+    width: 100%;
+    background-color: rgba(var(--secondary-dark), 0.9); /* Fondo semi-transparente */
+    padding: 15px 20px;
+    z-index: 1000; /* Asegura que esté encima de todo */
+    transition: background-color 0.3s ease;
+}
+
+/* Clase para cuando el nav esté fijo (añadida por JS) */
+#main-nav.fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(var(--primary-dark), 0.95); /* Más oscuro cuando está fijo */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8em;
+    color: var(--neon-purple);
+    text-shadow: 0 0 8px var(--neon-purple);
+}
+
+
+
+
+
+/*.nav-links {
+    list-style: none;
+    display: flex;
+}
+
+.nav-links li {
+    margin-left: 30px;
+}
+
+.nav-links a {
+    color: var(--text-light);
+    font-size: 1.1em;
+    padding: 5px 0;
+    position: relative;
+    overflow: hidden;
+    text-transform: uppercase;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--neon-blue);
+    transition: width 0.3s ease-out;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Botón de Hamburguesa */
+.hamburger-menu {
+    display: none; /* Oculto por defecto en desktop */
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: var(--neon-blue);
+    cursor: pointer;
+    z-index: 1001; /* Asegura que esté por encima del nav cuando se abra */
+    padding: 5px;
+}
+
+
+
+
+
+ul {
+    display: flex;
+    position: relative;
+    gap: 20px;
+  }
+  
+  ul li {
+    position: relative;
+    list-style: none;
+    width: 80px;
+    height: 60px;
+   padding-bottom: 20px;
+   padding-right: 25px;
+   background: rgb(3, 163, 216);
+    box-shadow: 0 10px 25px rgb(0, 0, 0);
+    border-radius: 30px;
+    cursor: pointer;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    transition: 0.5s;
+  }
+  
+  ul li::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 60px;
+    background: linear-gradient(45deg, var(--neon-purple), var(--r));
+    opacity: 0;
+    transition: 0.5s;
+  }
+  
+  ul li::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    height: 100%;
+    border-radius: 60px;
+    background: linear-gradient(45deg, var(--i), var(--j));
+    transition: 0.5s;
+    filter: blur(15px);
+    z-index: -1;
+    opacity: 0;
+  }
+  
+  ul li:hover {
+    width: 180px;
+    
+    box-shadow: 0 10px 25px rgb(0, 0, 0);
+  }
+  
+  ul li:hover::before {
+    opacity: 1;
+  }
+  
+  ul li:hover::after {
+    opacity: 0.5;
+  }
+  
+  ul li ion-icon {
+    color: #ffffff;
+    font-size: 1.5em;
+    transition: 0.5s;
+    transition-delay: 0.25s;
+  }
+  
+  ul li:hover ion-icon {
+    transform: scale(0);
+    color: #ece6e6;
+    transition-delay: 0s;
+  }
+  
+  ul li span {
+    position: absolute;
+  }
+  
+  ul li .title {
+    color: #fffcfc;
+    font-size: 1.1em;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transform: scale(0);
+    transition: 0.5s;
+    transition-delay: 0s;
+  }
+  
+  ul li:hover .title {
+    transform: scale(1);
+    transition-delay: 0.25s;
+  }
+  
+  
+
+
+ /* Estilos del Main Content */
+.main-content {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.content-section {
+    background-color: var(--secondary-dark);
+    margin-bottom: 40px;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(var(--neon-blue), 0.2);
+    border-left: 5px solid var(--neon-purple); /* Borde decorativo */
+}
+
+.content-section h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5em;
+    color: var(--neon-blue);
+    margin-bottom: 20px;
+    text-shadow: 0 0 5px rgba(var(--neon-blue), 0.5);
+}
+
+.content-section p {
+    margin-bottom: 15px;
+    color: var(--neon-purple);
+}
+
+/* Grid de Proyectos */
+.project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.project-item {
+    background-color: var(--primary-dark);
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(var(--neon-purple), 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(var(--neon-purple), 0.6);
+}
+
+.project-item h3 {
+    color: var(--neon-purple);
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-shadow: 0 0 5px rgba(var(--neon-purple), 0.5);
+}
+
+.project-item p {
+    color: var(--text-muted);
+    font-size: 0.95em;
+    margin-bottom: 15px;
+}
+
+.btn-project {
+    display: inline-block;
+    background-color: var(--neon-blue);
+    color: var(--primary-dark);
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-project:hover {
+    background-color: var(--neon-purple);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 30px;
+    background-color: var(--accent-blue);
+    color: var(--text-light);
+    font-size: 0.9em;
+    margin-top: 50px;
+}
+
+/* Media Queries para Responsividad (Dispositivos Móviles) */
+@media (max-width: 768px) {
+    .header-content h1 {
+        font-size: 2.5em;
+    }
+
+    .nav-links {
+        display: none; /* Oculta los enlaces por defecto en móviles */
+        flex-direction: column;
+        width: 100%;
+        background-color: rgba(var(--primary-dark), 0.98);
+        position: absolute;
+        top: 100%; /* Debajo del nav */
+        left: 0;
+        padding: 20px 0;
+        border-top: 1px solid rgba(var(--neon-blue), 0.3);
+        box-shadow: 0 5px 15px rgb(0, 0, 0);
+        transform: translateY(-10px); /* Para un efecto de entrada suave */
+        opacity: 0;
+        pointer-events: none; /* Deshabilita clics cuando no es visible */
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-links.active {
+        display: flex; /* Muestra los enlaces cuando está activo */
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: all;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .hamburger-menu {
+        display: block; /* Muestra el botón de hamburguesa */
+    }
+
+    .content-section {
+        padding: 20px;
+    }
+
+    .content-section h2 {
+        font-size: 1.8em;
+    }
+}
+
+
+
+.section-three button {
+  display: flex;
+  position: relative;
+  margin: 1rem auto;
+  max-height: 400px;
+  overflow: hidden;
+  box-shadow: 0 0 10px var(--gray2);
+  padding: 0;
+  border: none;
+  cursor: zoom-in;
+}
+.section-three img {
+  display: block;
+  max-height: 250px;
+  transition: transform ease .3s;
+}
+.section-three button:hover img {
+  transform: scale(1.25);
+}
+.section-three button:before{
+  content: '';
+  background-color: var(--primary-dark);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  transition: opacity ease .3s;
+  opacity: 0;
+
+}
+.section-three button:hover::before {
+  opacity: 0.10;
+}
+
+.section-three h4 {
+display: block;
+margin: 0;
+position: absolute;
+z-index: 2;
+bottom: 0%;
+left: 50%;
+transform: translate(-50%, 50%);
+color: rgb(255, 255, 255);
+font-size: 40px;
+opacity: 0;
+transition: bottom ease .3s, opacity ease 3.s;
+
+}
+.section-three button:hover h4 {
+  bottom: 30%;
+  opacity: 1;
+}
+
+.section-three button:after {
+  content: '';
+  width: 100%; /* Prueba con este valor inicial */
+  height: 100%; /* Prueba con este valor inicial */
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  background-image: url('imagenes/lupa1.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: opacity ease .3s;
+}
+
+.section-three button:hover:after {
+  opacity: .30;
+}
+hr {
+    margin: 0;
+    padding: 0;
+    color: rgba(10, 232, 232, 0.41);
+}
+
+
+@media screen and (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    gap: 0.5em;
+  }
+
+  main {
+    flex-direction: column; /* Apilar secciones verticalmente */
+  }
+
+  section {
+    padding: 1em;
+  }
+
+  header, nav, footer {
+    font-size: 1rem; /* Reducir texto si es necesario */
+  }
+}
+
+

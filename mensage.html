@@ -1,0 +1,472 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jarvis - Asistente IA</title>
+   <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ocupa el 100% de la altura de la ventana */
+    background-color: #000000; /* Fondo oscuro para resaltar los efectos */
+    margin: 0;
+    overflow: hidden; /* Evita barras de desplazamiento innecesarias */
+    color: #fff6f6;
+}
+
+/* Contenedor principal del chatbot */
+.chatbot-container {
+    width: 380px;
+    height: 550px;
+    background-color: #000000; /* Fondo más oscuro para el chat */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgb(0, 238, 255);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative; /* Para posibles efectos internos posicionados */
+    z-index: 10; /* Asegura que esté por encima de los efectos de fondo */
+    border: 3px solid #00d9ff; /* Borde sutil */
+}
+
+/* Encabezado del chat */
+.chat-header {
+    background-color: #0e0e0e; /* Un tono más oscuro de púrpura/azul */
+    color: rgb(0, 247, 255);
+    text-shadow: 2px 2px #038bfa;
+    padding: 15px;
+    text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    font-size: 1.1em;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* Ventana de chat (donde se muestran los mensajes) */
+.chat-window {
+    flex-grow: 1; /* Ocupa el espacio restante verticalmente */
+    padding: 15px;
+    overflow-y: auto; /* Permite desplazamiento si hay muchos mensajes */
+    border-bottom: 1px solid #1b6bc1;
+    display: flex; /* Para controlar la alineación de los mensajes */
+    flex-direction: column;
+}
+
+/* Estilo para cada mensaje individual */
+.message {
+    display: flex; /* Para alinear el avatar y el contenido del mensaje */
+    align-items: flex-end; /* Alinea los elementos en la parte inferior del mensaje */
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    max-width: 85%;
+    position: relative; /* Para posibles efectos internos (como el brillo) */
+    font-size: 0.95em;
+    line-height: 1.4;
+}
+
+/* Mensajes del usuario */
+.user-message {
+    box-shadow: 1px 3px #ff0000;
+    border: 3px solid rgb(255, 1, 200);
+    background-color:#000000 ; /* Azul más oscuro para mensajes del usuario */
+    color: rgb(255, 255, 255);
+    margin-left: auto; /* Empuja el mensaje del usuario a la derecha */
+    border-bottom-right-radius: 5px; /* Esquina inferior derecha más cuadrada */
+}
+
+/* Mensajes del bot (Jarvis) */
+.bot-message {
+    box-shadow: 3px 1px #003cff;
+    border: 3px solid rgb(0, 191, 255);
+    background-color:#000000; /* Púrpura oscuro para mensajes del bot */
+    color: rgb(255, 255, 255);
+    margin-right: auto; /* Mantiene el mensaje del bot a la izquierda */
+    border-bottom-left-radius: 5px; /* Esquina inferior izquierda más cuadrada */
+}#00e5ff
+
+/* Estilo para el avatar de Jarvis */
+.bot-avatar {
+    font-size: 1.5em;
+    margin-right: 8px;
+    line-height: 1; /* Ajusta la altura de línea para que el emoji no sea demasiado grande */
+}
+
+/* Contenido del mensaje (para que el texto no se pegue al avatar) */
+.message-content {
+    word-wrap: break-word; /* Rompe palabras largas para evitar desbordamiento */
+}
+
+/* Área de entrada del usuario y botón */
+.chat-input {
+    display: flex;
+    padding: 15px;
+    border-top: 1px solid #7d8080;
+    background-color: #000000; /* Mismo color de fondo que el contenedor */
+}
+
+/* Campo de texto para la entrada del usuario */
+.chat-input input {
+    flex-grow: 1; /* Ocupa el espacio disponible */
+    padding: 12px 18px;
+    border: 1px solid #12f4e1;
+    border-radius: 25px;
+    margin-right: 10px;
+    background-color: #5a5858; /* Fondo del input más oscuro */
+    color: #ffffff;
+    outline: none; /* Elimina el contorno al hacer focus */
+    font-size: 1em;
+    
+}
+
+
+
+
+.chat-input input::placeholder {
+    color: #bcbaba; /* Color del placeholder */
+}
+
+/* Botón de enviar */
+.chat-input button {
+    background-color: #015799; /* Verde brillante */
+    color: white;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.chat-input button:hover {
+    color: #000000;
+    background-color: #01e9fe; /* Verde un poco más oscuro al pasar el ratón */
+    transform: translateY(-1px); /* Pequeño efecto de elevación */
+}
+
+.chat-input button:active {
+    transform: translateY(0); /* Vuelve a la posición normal al hacer click */
+}
+
+/* --- Efectos de Electricidad y Rayo --- */
+
+/* Contenedor principal de las líneas de electricidad */
+.electricity-lines-container {
+    position: fixed; /* Fijo en la ventana de visualización */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite que los clics pasen a través de él */
+    overflow: hidden; /* Asegura que las líneas no se desborden */
+    z-index: 5; /* Por debajo del chatbot */
+}
+
+/* Estilo para cada línea de electricidad individual */
+.electricity-line {
+    position: absolute;
+    background: linear-gradient(to bottom, transparent, #00FFFF, transparent); /* Degradado de cian brillante */
+    width: 5px; /* Ancho de la línea */
+    opacity: 0; /* Inicialmente invisible */
+    animation: fadeAndMove 1.5s forwards ease-out; /* Animación de desvanecimiento y movimiento */
+    transform-origin: top center; /* El punto de origen de la transformación para la rotación */
+    filter: drop-shadow(0 0 10px #00FFFF); /* Resplandor al rededor de la línea */
+}
+
+/* Animación para que las líneas se desvanezcan y se muevan */
+@keyframes fadeAndMove {
+    0% {
+        opacity: 0;
+        transform: translateY(0) scaleY(0); /* Empieza invisible y colapsado */
+    }
+    10% {
+        opacity: 0.8;
+        transform: translateY(0) scaleY(1); /* Aparece y se extiende */
+    }
+    90% {
+        opacity: 0.8;
+        transform: translateY(100vh) scaleY(1); /* Se mueve hacia abajo */
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(100vh) scaleY(0); /* Se desvanece y colapsa al final */
+    }
+}
+
+/* --- Efecto de Resplandor del Bot al Hablar --- */
+
+/* Clase que se añade al mensaje del bot cuando está activo */
+.bot-message.sparkle-active .message-content {
+    animation: botSparkle 0.8s ease-out forwards; /* Animación de brillo */
+    box-shadow: 0 0 10px rgba(106, 27, 154, 0.7), /* Brillo del color del mensaje */
+                0 0 20px rgba(106, 27, 154, 0.5);
+}
+
+/* Animación del resplandor del bot */
+@keyframes botSparkle {
+    0% {
+        box-shadow: none;
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(106, 27, 154, 0.9), /* Más intenso en el medio */
+                    0 0 30px rgba(106, 27, 154, 0.7),
+                    0 0 45px rgba(106, 27, 154, 0.4);
+    }
+    100% {
+        box-shadow: none; /* Vuelve a la normalidad */
+    }
+}
+
+/* --- Efecto de Destello (Flash) al Recibir un Rayo --- */
+.thunder-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0); /* Transparente por defecto */
+    pointer-events: none; /* No bloquea interacciones */
+    z-index: 99; /* Por encima de todo */
+    animation: thunderFlashAnimation 0.3s ease-out forwards; /* Animación de un solo destello */
+}
+
+@keyframes thunderFlashAnimation {
+    0% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+    50% {
+        background-color: rgb(31, 30, 30); /* Destello blanco */
+    }
+    100% {
+        background-color: rgba(255, 255, 255, 0);
+    }
+}
+
+
+@media (max-width: 768px) {
+    .chatbot-container {
+        width: 90%;
+        max-width: 400px;
+        bottom: 10px;
+        right: 5%;
+    }
+
+    .chat-header h1 {
+        font-size: 1.2em;
+        text-align: center;
+    }
+
+    .chat-window {
+        height: 300px;
+        font-size: 14px;
+        overflow-y: auto;
+    }
+
+    .message {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .chat-input {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 10px;
+    }
+
+    #user-input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    #send-button {
+        font-size: 14px;
+        padding: 10px;
+        cursor: pointer;
+    }
+}
+
+
+
+   </style>
+
+
+</head>
+<body>
+    <div class="chatbot-container">
+        <div class="chat-header">
+            <h1>Jarvis</h1>
+        </div>
+        <div class="chat-window" id="chat-window">
+            <div class="message bot-message">
+                <div class="bot-avatar">⚡</div>
+                <div class="message-content">¡Hola! Soy Jarvis. ¿En qué puedo ayudarte hoy?</div>
+            </div>
+            </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Escribir mensaje...">
+            <button id="send-button">Enviar</button>
+        </div>
+    </div>
+
+    <div class="electricity-lines-container" id="electricity-lines-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Obteniendo referencias a los elementos del DOM
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-button');
+            const chatWindow = document.getElementById('chat-window');
+            const electricityLinesContainer = document.getElementById('electricity-lines-container');
+        
+            // Event listeners para enviar mensajes
+            sendButton.addEventListener('click', sendMessage);
+            userInput.addEventListener('keypress', (e) => {
+                // Permite enviar el mensaje presionando Enter
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        
+            /**
+             * Función principal para enviar un mensaje del usuario.
+             * Lee el input del usuario, lo muestra en el chat y luego genera una respuesta de Jarvis.
+             */
+            function sendMessage() {
+                const messageText = userInput.value.trim(); // Obtiene el texto y quita espacios extra
+                if (messageText === '') return; // No hace nada si el mensaje está vacío
+        
+                // Muestra el mensaje del usuario en la ventana de chat
+                appendMessage(messageText, 'user-message');
+                userInput.value = ''; // Limpia el campo de entrada
+        
+                // Simula el "pensamiento" de Jarvis antes de responder
+                // Genera algunas líneas de electricidad al "procesar"
+                generateElectricityLines(3); // Genera 3 líneas de electricidad
+                triggerThunderFlash(); // Dispara un destello simulando un trueno
+        
+                // Espera un poco antes de que Jarvis responda para simular procesamiento
+                setTimeout(() => {
+                    const botResponse = getJarvisResponse(messageText); // Obtiene la respuesta de Jarvis
+                    appendMessage(botResponse, 'bot-message'); // Muestra la respuesta del bot
+                }, 1000); // Retraso de 1 segundo
+            }
+        
+            /**
+             * Añade un nuevo mensaje a la ventana de chat.
+             * @param {string} text - El contenido del mensaje.
+             * @param {string} type - El tipo de mensaje ('user-message' o 'bot-message').
+             */
+            function appendMessage(text, type) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', type);
+        
+                // Si es un mensaje del bot, añade el avatar y envuelve el contenido
+                if (type === 'bot-message') {
+                    messageDiv.innerHTML = `<div class="bot-avatar">🤖</div><div class="message-content">${text}</div>`;
+                } else {
+                    messageDiv.textContent = text; // Para mensajes del usuario, solo el texto
+                }
+        
+                chatWindow.appendChild(messageDiv);
+                chatWindow.scrollTop = chatWindow.scrollHeight; // Desplaza hacia abajo automáticamente
+        
+                // Si es un mensaje del bot, activa la animación de brillo
+                if (type === 'bot-message') {
+                    const messageContent = messageDiv.querySelector('.message-content') || messageDiv;
+                    messageContent.classList.add('sparkle-active');
+                    // Elimina la clase después de que la animación termine para permitir que se repita
+                    setTimeout(() => {
+                        messageContent.classList.remove('sparkle-active');
+                    }, 800); // Duración de la animación en CSS
+                }
+            }
+        
+            /**
+             * Lógica de respuestas de Jarvis.
+             * Aquí es donde puedes expandir la "inteligencia" de tu chatbot.
+             * @param {string} message - El mensaje del usuario.
+             * @returns {string} La respuesta de Jarvis.
+             */
+            function getJarvisResponse(message) {
+                const lowerCaseMessage = message.toLowerCase(); // Convierte a minúsculas para facilitar la comparación
+        
+                if (lowerCaseMessage.includes('hola') || lowerCaseMessage.includes('saludos')) {
+                    return '¡Hola! Soy Jarvis.  ¿En qué puedo ayudarte hoy?';
+                } else if (lowerCaseMessage.includes('cómo estás') || lowerCaseMessage.includes('que tal')) {
+                    return 'Funcionando óptimamente. ¿Y tú?';
+                } else if (lowerCaseMessage.includes('tu nombre')) {
+                    return 'Mi nombre es Jarvis, un sistema diseñado para brindarte soporte.';
+                } else if (lowerCaseMessage.includes('ayuda') || lowerCaseMessage.includes('necesito ayuda')) {
+                    return 'Por supuesto. ¿Podrías especificar qué tipo de asistencia requieres?';
+                } else if (lowerCaseMessage.includes('gracias')) {
+                    return 'De nada. Estoy aquí para servir.';
+                } else if (lowerCaseMessage.includes('tiempo') || lowerCaseMessage.includes('clima')) {
+                    return 'No tengo acceso a datos meteorológicos en tiempo real. ¿Hay algo más en lo que pueda ayudarte?';
+                } else if (lowerCaseMessage.includes('quién eres')) {
+                    return 'Soy un programa de inteligencia artificial, diseñado para asistir a mis usuarios.';
+                } else if (lowerCaseMessage.includes('fecha')) {
+                    const date = new Date();
+                    return `Hoy es ${date.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}.`;
+                } else if (lowerCaseMessage.includes('hora')) {
+                    const date = new Date();
+                    return `Son las ${date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}.`;
+                } else if (lowerCaseMessage.includes('adiós') || lowerCaseMessage.includes('hasta luego') || lowerCaseMessage.includes('chao')) {
+                    return '¡Hasta pronto! Que tengas un excelente día.';
+                } else {
+                    return 'Lo siento, no comprendo tu solicitud. ¿Podrías ser más específico?';
+                }
+            }
+        
+            /**
+             * Genera un número especificado de líneas de electricidad animadas.
+             * Estas líneas simulan un efecto de rayo que se desvanece.
+             * @param {number} count - El número de líneas a generar.
+             */
+            function generateElectricityLines(count) {
+                for (let i = 0; i < count; i++) {
+                    const line = document.createElement('div');
+                    line.classList.add('electricity-line');
+        
+                    // Posiciona la línea aleatoriamente en la parte superior de la pantalla
+                    line.style.left = `${Math.random() * 100}vw`; // Posición horizontal aleatoria
+                    line.style.height = `${50 + Math.random() * 150}px`; // Altura aleatoria
+                    line.style.animationDuration = `${1 + Math.random() * 0.8}s`; // Duración de animación aleatoria
+                    line.style.animationDelay = `${Math.random() * 0.2}s`; // Retraso de inicio aleatorio
+                    line.style.transform = `translateY(0) rotate(${Math.random() * 90 - 45}deg)`; // Rotación aleatoria
+        
+                    electricityLinesContainer.appendChild(line);
+        
+                    // Elimina la línea del DOM una vez que su animación termina
+                    line.addEventListener('animationend', () => {
+                        line.remove();
+                    });
+                }
+            }
+        
+            /**
+             * Dispara un destello blanco en toda la pantalla, simulando un trueno.
+             */
+            function triggerThunderFlash() {
+                const flashDiv = document.createElement('div');
+                flashDiv.classList.add('thunder-flash');
+                document.body.appendChild(flashDiv);
+        
+                // Elimina el elemento del flash una vez que su animación termina
+                flashDiv.addEventListener('animationend', () => {
+                    flashDiv.remove();
+                });
+            }
+        
+            // Opcional: Generar algunas líneas al cargar la página para un efecto inicial
+            // generateElectricityLines(5);
+        });</script>
+</body>
+</html>
