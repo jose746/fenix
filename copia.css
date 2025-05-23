@@ -486,7 +486,7 @@ transition: bottom ease .3s, opacity ease 3.s;
   top: 50%;
   transform: translate(-50%, -50%);
   opacity: 0;
-  background-image: url('imagenes/lupa1.jpg');
+  background-image: url('lupa1.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
